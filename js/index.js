@@ -1,9 +1,4 @@
-const limit = 50
-let page = 1
 const url = "http://localhost:3000/monsters"
-const urlLimitPage = `http://localhost:3000/monsters/?_limit=${limit}&_page=${page}`
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const createMonster = document.getElementById("create-monster")
@@ -55,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     buttonback.addEventListener("click", () => {
         page > 1 ? page -= 1 : page = 1
-        
+
         monsterContainer.innerHTML = ""
         fetch(`http://localhost:3000/monsters/?_limit=50&_page=${page}`)
         .then(res => res.json())
