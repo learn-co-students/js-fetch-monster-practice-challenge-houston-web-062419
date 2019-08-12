@@ -1,10 +1,22 @@
 
 const div = document.querySelector("#monster-container")
 const form_div = document.querySelector("#create-monster")
+const limit = 5
 
 let page = 1
 
 document.addEventListener("DOMContentLoaded", () => {
+
+	const end = document.createElement("button")
+	end.innerText = "to the end"
+	const start = document.createElement("button")
+	start.innerText = "to the beginning"
+	const fwrd = document.querySelector("#forward")
+	const back = document.querySelector("#back")
+	document.querySelector("body").insertBefore(start, back)
+	document.querySelector("body").insertBefore(end, back)
+
+
 
 	const form = document.createElement("form")	
 	const name_field = document.createElement("input")
@@ -40,13 +52,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	fetch_page(page)
 
-	const fwrd = document.querySelector("#forward")
+	end.addEventListener("click", () => {
+		page = get_last()
+		
+	})
+
+	start.addEventListener("click", () => {
+		page = 1
+		fetch_page(page)
+	})
+
+
 	fwrd.addEventListener("click", () => {
 		page += 1
 		fetch_page(page)
 	})
 
-	const back = document.querySelector("#back")
 	back.addEventListener("click", () => {
 		if (page > 1){
 			page -= 1
@@ -55,8 +76,30 @@ document.addEventListener("DOMContentLoaded", () => {
 	})
 })
 
-function fetch_page(page) {
-	fetch(`http://localhost:3000/monsters/?_limit=5&_page=${page}`)
+function get_last() {
+		fetch(`http://localhost:3000/monsters/`)
+		.then(res => res.json())
+		.then(json => {
+			console.log(json.length)
+			console.log(Math.floor(json.length/limit))
+			// if ((json.length - Math.floor(json.length/limit) * limit) > 0) { 
+				 page = Math.floor(json.length/limit)
+		console.log(page)
+
+				 fetch_page()
+			// }else{
+			// 	page = Math.floor(json.length/limit) - 1
+			// }
+
+			return page
+		})
+
+}
+
+function fetch_page() {
+	console.log(page)
+
+	fetch(`http://localhost:3000/monsters/?_limit=${limit}&_page=${page}`)
 	.then(res => res.json())
 	.then(json => {
 		console.log(json)
@@ -71,4 +114,7 @@ function fetch_page(page) {
 			div.append(h2, h4, p)
 		})
 	})
+	
+
+	
 }
