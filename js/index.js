@@ -1,3 +1,4 @@
+let page = 1
 const url = "http://localhost:3000/monsters"
 
 document.addEventListener("DOMContentLoaded", () => {
